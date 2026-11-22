@@ -1,0 +1,9 @@
+{
+  "name": "multi-repo-doc",
+  "version": "0.6.0",
+  "description": "Set up the two doc homes in a project or multi-repo workspace: a private versioned .docs/ at the root and each repo's committed docs/, with a manage-docs skill and memory entry.",
+  "author": { "name": "agungsptr" },
+  "homepage": "https://github.com/agungsptr/skills",
+  "repository": "https://github.com/agungsptr/skills",
+  "license": "MIT"
+}

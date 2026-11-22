@@ -1,0 +1,22 @@
+{
+  "name": "agungsptr",
+  "description": "Claude Code skills by agungsptr: AgentThread setup, a manager + workers feature workflow, and multi-repo documentation.",
+  "owner": { "name": "agungsptr" },
+  "plugins": [
+    {
+      "name": "agt-setup",
+      "source": "./plugins/agt-setup",
+      "description": "Install and configure AgentThread (agt) for a project with one approval."
+    },
+    {
+      "name": "feature-workflow",
+      "source": "./plugins/feature-workflow",
+      "description": "Manager + workers feature workflow, from first discussion to a squashed PR, with per-ticket review."
+    },
+    {
+      "name": "multi-repo-doc",
+      "source": "./plugins/multi-repo-doc",
+      "description": "Two doc homes for a project or multi-repo workspace: private .docs/ and committed docs/."
+    }
+  ]
+}

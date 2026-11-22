@@ -1,0 +1,9 @@
+{
+  "name": "feature-workflow",
+  "version": "0.6.0",
+  "description": "A manager + workers feature workflow (discussion, spec, tickets, worktrees, staged e2e, release doc, squash for the PR) plus review-ticket, the per-ticket code review it uses in stage 5.",
+  "author": { "name": "agungsptr" },
+  "homepage": "https://github.com/agungsptr/skills",
+  "repository": "https://github.com/agungsptr/skills",
+  "license": "MIT"
+}
