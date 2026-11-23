@@ -1,6 +1,6 @@
 {
   "name": "agt-setup",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Set up AgentThread (agt) for a project: installs agt when missing, analyses the repos read-only and writes .agentthread/config.yaml with one approval.",
   "author": {
     "name": "agungsptr"

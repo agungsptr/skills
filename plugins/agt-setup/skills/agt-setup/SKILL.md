@@ -57,10 +57,39 @@ echo "${CLAUDE_CONFIG_DIR:-}"                 # the Claude Code account this ses
 
 Existing values are kept unless the analysis proves them wrong; say so in the proposal.
 
-**Claude account.** When any role uses claude-code and `CLAUDE_CONFIG_DIR` is set here, propose
-`agents.env.CLAUDE_CONFIG_DIR: <that path>` (write `~/…` for paths under the home dir). Evidence: "the Claude Code
-account running this setup". Without it, agents start with the env of whatever shell opened Herdr. A shell without the
-variable falls back to `~/.claude`, which asks to log in and to trust folders again. When it is unset, propose nothing.
+**Claude accounts.** Only when some role uses claude-code. List the candidate config dirs by name only, never reading
+anything inside them:
+
+```bash
+ls -d ~/.claude ~/.claude-* 2>/dev/null       # names only; never open files in them (credentials live there)
+```
+
+- **One account** (one dir, or the user wants one): when `CLAUDE_CONFIG_DIR` is set here, propose
+  `agents.env.CLAUDE_CONFIG_DIR: <that path>`. Write `~/…` for paths under the home dir. Evidence: "the Claude Code
+  account running this setup". Otherwise propose nothing. Without the variable, agents start with the env of whatever
+  shell opened Herdr, and a shell without it falls back to `~/.claude`, which asks to log in and to trust folders
+  again.
+- **Several accounts** (two or more dirs): ask in the question batch which to use as profiles, and in which order. The
+  first is used first. Propose:
+
+  ```yaml
+  agents:
+    claude:
+      profiles:
+        - { name: <suffix, e.g. personal>, config_dir: ~/.claude-<suffix> }
+        - { name: ..., config_dir: ... }
+      switch_at: { five_hour: 90, seven_day: 95 }
+  ```
+
+  Put the account running this setup (`CLAUDE_CONFIG_DIR`) first unless the user says otherwise. With two or more
+  profiles, agt uses one account until it nears its limit, then switches. Among the eligible accounts it picks the one
+  whose 5-hour window resets soonest, then the one with the lowest usage. Never also set
+  `agents.env.CLAUDE_CONFIG_DIR` or `agents.claude.config_dir`, because agt refuses that combination.
+- **Status line:** agt shows its own status line in agent panes (profile and usage), replacing the user's own. Ask
+  whether they want their own status line too. If so, they give the command for `agents.claude.statusline`. Never
+  read their Claude settings to find it.
+- **Trust:** tell the user that each profile asks once to trust the project folder, in the main pane at `agt start`,
+  and that `agt usage` shows each profile's usage later.
 
 ## Step 3 — Analyse (read-only, per repo)
 
@@ -96,7 +125,7 @@ Present in a single message, in the user's language (detect it from their messag
 
 | Area | Keys |
 |---|---|
-| Agents | `agents.roles.{main,coordinator,worker}` (`agent`: claude-code, opencode, codex, omp, agy; `model`, `effort`, `env`); optional `agents.complexity.tiers`; `agents.env` (env for every launched agent, e.g. `CLAUDE_CONFIG_DIR`; values shown as `***`) |
+| Agents | `agents.roles.{main,coordinator,worker}` (`agent`: claude-code, opencode, codex, omp, agy; `model`, `effort`, `env`); optional `agents.complexity.tiers`; `agents.env` (env for every launched agent, e.g. `CLAUDE_CONFIG_DIR`; values shown as `***`); `agents.claude.profiles[]` (`name`, `config_dir`), `agents.claude.switch_at` (`five_hour`, `seven_day` %), `agents.claude.statusline` |
 | Repos | `workspace.repos.<r>`: `path`, `source_branch`, `prod_branch`, `staging_branch`, `pr_order`, `unit`, `typecheck`, `copy[]` (files or directories; tracked files become skip-worktree), `link[]` (e.g. `node_modules`; skips `install` while lockfiles match), `install` |
 | Services | `workspace.services.<name>`: `repo`, `dir`, `start`, `port`, `health` (`http(s)://…` or `tcp:<port>`), `env` (map: `NODE_ENV`, `PORT`… — never in `start`/`migrate` strings), `migrate`, `migrate_on_start` (default false), `after[]`, `enabled` |
 | Worktrees | `workspace.worktree_setup` — only when the project has its own script (it replaces copy + install) |
