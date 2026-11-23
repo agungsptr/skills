@@ -52,9 +52,15 @@ link or install below needs the user's OK first.
 ```bash
 command -v claude opencode codex omp agy     # installed agents → claude-code, opencode, codex, omp, agy
 agt config show --json                        # current effective config; keep what is already set
+echo "${CLAUDE_CONFIG_DIR:-}"                 # the Claude Code account this session runs on (a path, not a secret)
 ```
 
 Existing values are kept unless the analysis proves them wrong; say so in the proposal.
+
+**Claude account.** When any role uses claude-code and `CLAUDE_CONFIG_DIR` is set here, propose
+`agents.env.CLAUDE_CONFIG_DIR: <that path>` (write `~/…` for paths under the home dir). Evidence: "the Claude Code
+account running this setup". Without it, agents start with the env of whatever shell opened Herdr. A shell without the
+variable falls back to `~/.claude`, which asks to log in and to trust folders again. When it is unset, propose nothing.
 
 ## Step 3 — Analyse (read-only, per repo)
 
@@ -90,7 +96,7 @@ Present in a single message, in the user's language (detect it from their messag
 
 | Area | Keys |
 |---|---|
-| Agents | `agents.roles.{main,coordinator,worker}` (`agent`: claude-code, opencode, codex, omp, agy; `model`, `effort`); optional `agents.complexity.tiers` |
+| Agents | `agents.roles.{main,coordinator,worker}` (`agent`: claude-code, opencode, codex, omp, agy; `model`, `effort`, `env`); optional `agents.complexity.tiers`; `agents.env` (env for every launched agent, e.g. `CLAUDE_CONFIG_DIR`; values shown as `***`) |
 | Repos | `workspace.repos.<r>`: `path`, `source_branch`, `prod_branch`, `staging_branch`, `pr_order`, `unit`, `typecheck`, `copy[]` (files or directories; tracked files become skip-worktree), `link[]` (e.g. `node_modules`; skips `install` while lockfiles match), `install` |
 | Services | `workspace.services.<name>`: `repo`, `dir`, `start`, `port`, `health` (`http(s)://…` or `tcp:<port>`), `env` (map: `NODE_ENV`, `PORT`… — never in `start`/`migrate` strings), `migrate`, `migrate_on_start` (default false), `after[]`, `enabled` |
 | Worktrees | `workspace.worktree_setup` — only when the project has its own script (it replaces copy + install) |

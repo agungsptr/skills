@@ -1,8 +1,10 @@
 {
   "name": "agt-setup",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Set up AgentThread (agt) for a project: installs agt when missing, analyses the repos read-only and writes .agentthread/config.yaml with one approval.",
-  "author": { "name": "agungsptr" },
+  "author": {
+    "name": "agungsptr"
+  },
   "homepage": "https://github.com/agungsptr/skills",
   "repository": "https://github.com/agungsptr/skills",
   "license": "MIT"
